@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6254" systemVersion="14B25" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="AccData" syncable="YES">
+        <attribute name="dateInserted" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateRecord" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateShort" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="LocationData" syncable="YES">
+        <attribute name="accuracyH" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="accuracyV" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="dateInserted" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateRecord" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateShort" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="long" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="speed" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+    </entity>
+    <entity name="MagData" syncable="YES">
+        <attribute name="dateInserted" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateRecord" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="dateShort" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="delta" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Raw" syncable="YES">
+        <attribute name="dAccelerometer" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="distance" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="dMagnetometer" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="lat" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="long" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="note" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="AccData" positionX="-54" positionY="54" width="128" height="120"/>
+        <element name="LocationData" positionX="-36" positionY="63" width="128" height="195"/>
+        <element name="MagData" positionX="-63" positionY="45" width="128" height="120"/>
+        <element name="Raw" positionX="-63" positionY="-18" width="128" height="165"/>
+    </elements>
+</model>

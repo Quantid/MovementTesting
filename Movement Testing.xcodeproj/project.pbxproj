@@ -1,0 +1,559 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		34B613148DF9B1418529F029 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 95BA87651822785159954212 /* libPods.a */; };
+		D5A442D31A7A3EA2009668BB /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A442D21A7A3EA2009668BB /* ResultsTableViewController.swift */; };
+		D5C8F2E61A759C17000D10D4 /* CalendarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C8F2E51A759C17000D10D4 /* CalendarTableViewController.swift */; };
+		D5C8F2E81A75A5CF000D10D4 /* DayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C8F2E71A75A5CF000D10D4 /* DayTableViewController.swift */; };
+		D5CECC111A8619E4006A22EF /* SensorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CECC101A8619E4006A22EF /* SensorController.swift */; };
+		D5CECC131A8642B4006A22EF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CECC121A8642B4006A22EF /* MapViewController.swift */; };
+		D5CECC151A8642F0006A22EF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5CECC141A8642F0006A22EF /* MapKit.framework */; };
+		D5CECC171A865DB8006A22EF /* VenueTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CECC161A865DB8006A22EF /* VenueTableViewController.swift */; };
+		D5CECC1C1A866735006A22EF /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5CECC1B1A866735006A22EF /* SystemConfiguration.framework */; };
+		D5CECC1E1A866778006A22EF /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5CECC1D1A866778006A22EF /* MobileCoreServices.framework */; };
+		D5CECC201A866784006A22EF /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5CECC1F1A866784006A22EF /* Security.framework */; };
+		D5CECC261A8691FD006A22EF /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CECC251A8691FD006A22EF /* Venue.swift */; };
+		D5CECC281A869F4F006A22EF /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CECC271A869F4F006A22EF /* Location.swift */; };
+		D5DD16001A72CCB40000AB2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DD15FF1A72CCB40000AB2E /* AppDelegate.swift */; };
+		D5DD16031A72CCB40000AB2E /* Movement_Testing.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D5DD16011A72CCB40000AB2E /* Movement_Testing.xcdatamodeld */; };
+		D5DD16081A72CCB40000AB2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D5DD16061A72CCB40000AB2E /* Main.storyboard */; };
+		D5DD160A1A72CCB40000AB2E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D5DD16091A72CCB40000AB2E /* Images.xcassets */; };
+		D5DD160D1A72CCB40000AB2E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5DD160B1A72CCB40000AB2E /* LaunchScreen.xib */; };
+		D5DD16191A72CCB40000AB2E /* Movement_TestingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DD16181A72CCB40000AB2E /* Movement_TestingTests.swift */; };
+		D5DD16231A72CD3F0000AB2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5DD16221A72CD3F0000AB2E /* CoreLocation.framework */; };
+		D5DD16251A72CD460000AB2E /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5DD16241A72CD460000AB2E /* CoreMotion.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D5DD16131A72CCB40000AB2E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5DD15F21A72CCB40000AB2E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D5DD15F91A72CCB40000AB2E;
+			remoteInfo = "Movement Testing";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0B9FB3F87351456C2548717C /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		85F0DC657A2B191D05395BA8 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		95BA87651822785159954212 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5A442D21A7A3EA2009668BB /* ResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
+		D5C8F2E51A759C17000D10D4 /* CalendarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarTableViewController.swift; sourceTree = "<group>"; };
+		D5C8F2E71A75A5CF000D10D4 /* DayTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayTableViewController.swift; sourceTree = "<group>"; };
+		D5CECC101A8619E4006A22EF /* SensorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorController.swift; sourceTree = "<group>"; };
+		D5CECC121A8642B4006A22EF /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		D5CECC141A8642F0006A22EF /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		D5CECC161A865DB8006A22EF /* VenueTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueTableViewController.swift; sourceTree = "<group>"; };
+		D5CECC181A866610006A22EF /* Movement Testing-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Movement Testing-Bridging-Header.h"; sourceTree = "<group>"; };
+		D5CECC1B1A866735006A22EF /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		D5CECC1D1A866778006A22EF /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		D5CECC1F1A866784006A22EF /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		D5CECC251A8691FD006A22EF /* Venue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
+		D5CECC271A869F4F006A22EF /* Location.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
+		D5DD15FA1A72CCB40000AB2E /* Movement Testing.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Movement Testing.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5DD15FE1A72CCB40000AB2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D5DD15FF1A72CCB40000AB2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D5DD16021A72CCB40000AB2E /* Movement_Testing.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Movement_Testing.xcdatamodel; sourceTree = "<group>"; };
+		D5DD16071A72CCB40000AB2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		D5DD16091A72CCB40000AB2E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		D5DD160C1A72CCB40000AB2E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		D5DD16121A72CCB40000AB2E /* Movement TestingTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Movement TestingTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D5DD16171A72CCB40000AB2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D5DD16181A72CCB40000AB2E /* Movement_TestingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movement_TestingTests.swift; sourceTree = "<group>"; };
+		D5DD16221A72CD3F0000AB2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D5DD16241A72CD460000AB2E /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D5DD15F71A72CCB40000AB2E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5CECC201A866784006A22EF /* Security.framework in Frameworks */,
+				D5CECC1E1A866778006A22EF /* MobileCoreServices.framework in Frameworks */,
+				D5CECC1C1A866735006A22EF /* SystemConfiguration.framework in Frameworks */,
+				D5CECC151A8642F0006A22EF /* MapKit.framework in Frameworks */,
+				D5DD16251A72CD460000AB2E /* CoreMotion.framework in Frameworks */,
+				D5DD16231A72CD3F0000AB2E /* CoreLocation.framework in Frameworks */,
+				34B613148DF9B1418529F029 /* libPods.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5DD160F1A72CCB40000AB2E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		247AAECD1F5633350815645B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D5CECC1F1A866784006A22EF /* Security.framework */,
+				D5CECC1D1A866778006A22EF /* MobileCoreServices.framework */,
+				D5CECC1B1A866735006A22EF /* SystemConfiguration.framework */,
+				95BA87651822785159954212 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		D5DD15F11A72CCB40000AB2E = {
+			isa = PBXGroup;
+			children = (
+				D5CECC141A8642F0006A22EF /* MapKit.framework */,
+				D5DD16241A72CD460000AB2E /* CoreMotion.framework */,
+				D5DD16221A72CD3F0000AB2E /* CoreLocation.framework */,
+				D5DD15FC1A72CCB40000AB2E /* Movement Testing */,
+				D5DD16151A72CCB40000AB2E /* Movement TestingTests */,
+				D5DD15FB1A72CCB40000AB2E /* Products */,
+				F0B72D15DE794189BD45DBDB /* Pods */,
+				247AAECD1F5633350815645B /* Frameworks */,
+				D5CECC181A866610006A22EF /* Movement Testing-Bridging-Header.h */,
+			);
+			sourceTree = "<group>";
+		};
+		D5DD15FB1A72CCB40000AB2E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D5DD15FA1A72CCB40000AB2E /* Movement Testing.app */,
+				D5DD16121A72CCB40000AB2E /* Movement TestingTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D5DD15FC1A72CCB40000AB2E /* Movement Testing */ = {
+			isa = PBXGroup;
+			children = (
+				D5DD15FF1A72CCB40000AB2E /* AppDelegate.swift */,
+				D5CECC101A8619E4006A22EF /* SensorController.swift */,
+				D5A442D21A7A3EA2009668BB /* ResultsTableViewController.swift */,
+				D5C8F2E51A759C17000D10D4 /* CalendarTableViewController.swift */,
+				D5C8F2E71A75A5CF000D10D4 /* DayTableViewController.swift */,
+				D5CECC121A8642B4006A22EF /* MapViewController.swift */,
+				D5CECC161A865DB8006A22EF /* VenueTableViewController.swift */,
+				D5DD16061A72CCB40000AB2E /* Main.storyboard */,
+				D5DD16091A72CCB40000AB2E /* Images.xcassets */,
+				D5DD160B1A72CCB40000AB2E /* LaunchScreen.xib */,
+				D5DD16011A72CCB40000AB2E /* Movement_Testing.xcdatamodeld */,
+				D5DD15FD1A72CCB40000AB2E /* Supporting Files */,
+				D5CECC251A8691FD006A22EF /* Venue.swift */,
+				D5CECC271A869F4F006A22EF /* Location.swift */,
+			);
+			path = "Movement Testing";
+			sourceTree = "<group>";
+		};
+		D5DD15FD1A72CCB40000AB2E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D5DD15FE1A72CCB40000AB2E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		D5DD16151A72CCB40000AB2E /* Movement TestingTests */ = {
+			isa = PBXGroup;
+			children = (
+				D5DD16181A72CCB40000AB2E /* Movement_TestingTests.swift */,
+				D5DD16161A72CCB40000AB2E /* Supporting Files */,
+			);
+			path = "Movement TestingTests";
+			sourceTree = "<group>";
+		};
+		D5DD16161A72CCB40000AB2E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				D5DD16171A72CCB40000AB2E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F0B72D15DE794189BD45DBDB /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				85F0DC657A2B191D05395BA8 /* Pods.debug.xcconfig */,
+				0B9FB3F87351456C2548717C /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D5DD15F91A72CCB40000AB2E /* Movement Testing */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5DD161C1A72CCB40000AB2E /* Build configuration list for PBXNativeTarget "Movement Testing" */;
+			buildPhases = (
+				049AFDA8AF5A888B674DCC43 /* Check Pods Manifest.lock */,
+				D5DD15F61A72CCB40000AB2E /* Sources */,
+				D5DD15F71A72CCB40000AB2E /* Frameworks */,
+				D5DD15F81A72CCB40000AB2E /* Resources */,
+				EE0487908681DE69449653CB /* Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Movement Testing";
+			productName = "Movement Testing";
+			productReference = D5DD15FA1A72CCB40000AB2E /* Movement Testing.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D5DD16111A72CCB40000AB2E /* Movement TestingTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D5DD161F1A72CCB40000AB2E /* Build configuration list for PBXNativeTarget "Movement TestingTests" */;
+			buildPhases = (
+				D5DD160E1A72CCB40000AB2E /* Sources */,
+				D5DD160F1A72CCB40000AB2E /* Frameworks */,
+				D5DD16101A72CCB40000AB2E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D5DD16141A72CCB40000AB2E /* PBXTargetDependency */,
+			);
+			name = "Movement TestingTests";
+			productName = "Movement TestingTests";
+			productReference = D5DD16121A72CCB40000AB2E /* Movement TestingTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D5DD15F21A72CCB40000AB2E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0610;
+				ORGANIZATIONNAME = "iD Foundry";
+				TargetAttributes = {
+					D5DD15F91A72CCB40000AB2E = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+					D5DD16111A72CCB40000AB2E = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = D5DD15F91A72CCB40000AB2E;
+					};
+				};
+			};
+			buildConfigurationList = D5DD15F51A72CCB40000AB2E /* Build configuration list for PBXProject "Movement Testing" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D5DD15F11A72CCB40000AB2E;
+			productRefGroup = D5DD15FB1A72CCB40000AB2E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D5DD15F91A72CCB40000AB2E /* Movement Testing */,
+				D5DD16111A72CCB40000AB2E /* Movement TestingTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D5DD15F81A72CCB40000AB2E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5DD16081A72CCB40000AB2E /* Main.storyboard in Resources */,
+				D5DD160D1A72CCB40000AB2E /* LaunchScreen.xib in Resources */,
+				D5DD160A1A72CCB40000AB2E /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5DD16101A72CCB40000AB2E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		049AFDA8AF5A888B674DCC43 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		EE0487908681DE69449653CB /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D5DD15F61A72CCB40000AB2E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5A442D31A7A3EA2009668BB /* ResultsTableViewController.swift in Sources */,
+				D5DD16001A72CCB40000AB2E /* AppDelegate.swift in Sources */,
+				D5CECC281A869F4F006A22EF /* Location.swift in Sources */,
+				D5DD16031A72CCB40000AB2E /* Movement_Testing.xcdatamodeld in Sources */,
+				D5CECC171A865DB8006A22EF /* VenueTableViewController.swift in Sources */,
+				D5CECC261A8691FD006A22EF /* Venue.swift in Sources */,
+				D5C8F2E61A759C17000D10D4 /* CalendarTableViewController.swift in Sources */,
+				D5C8F2E81A75A5CF000D10D4 /* DayTableViewController.swift in Sources */,
+				D5CECC111A8619E4006A22EF /* SensorController.swift in Sources */,
+				D5CECC131A8642B4006A22EF /* MapViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D5DD160E1A72CCB40000AB2E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D5DD16191A72CCB40000AB2E /* Movement_TestingTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D5DD16141A72CCB40000AB2E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D5DD15F91A72CCB40000AB2E /* Movement Testing */;
+			targetProxy = D5DD16131A72CCB40000AB2E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		D5DD16061A72CCB40000AB2E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D5DD16071A72CCB40000AB2E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		D5DD160B1A72CCB40000AB2E /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				D5DD160C1A72CCB40000AB2E /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		D5DD161A1A72CCB40000AB2E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D5DD161B1A72CCB40000AB2E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D5DD161D1A72CCB40000AB2E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 85F0DC657A2B191D05395BA8 /* Pods.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = "Movement Testing/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Movement Testing-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D5DD161E1A72CCB40000AB2E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0B9FB3F87351456C2548717C /* Pods.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
+				INFOPLIST_FILE = "Movement Testing/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Movement Testing-Bridging-Header.h";
+			};
+			name = Release;
+		};
+		D5DD16201A72CCB40000AB2E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Movement TestingTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Movement Testing.app/Movement Testing";
+			};
+			name = Debug;
+		};
+		D5DD16211A72CCB40000AB2E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = "Movement TestingTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Movement Testing.app/Movement Testing";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D5DD15F51A72CCB40000AB2E /* Build configuration list for PBXProject "Movement Testing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5DD161A1A72CCB40000AB2E /* Debug */,
+				D5DD161B1A72CCB40000AB2E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5DD161C1A72CCB40000AB2E /* Build configuration list for PBXNativeTarget "Movement Testing" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5DD161D1A72CCB40000AB2E /* Debug */,
+				D5DD161E1A72CCB40000AB2E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5DD161F1A72CCB40000AB2E /* Build configuration list for PBXNativeTarget "Movement TestingTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5DD16201A72CCB40000AB2E /* Debug */,
+				D5DD16211A72CCB40000AB2E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D5DD16011A72CCB40000AB2E /* Movement_Testing.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D5DD16021A72CCB40000AB2E /* Movement_Testing.xcdatamodel */,
+			);
+			currentVersion = D5DD16021A72CCB40000AB2E /* Movement_Testing.xcdatamodel */;
+			path = Movement_Testing.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = D5DD15F21A72CCB40000AB2E /* Project object */;
+}
