@@ -26,6 +26,7 @@ class DayTableViewController: UITableViewController {
     var rawLocation = [NSArray]()
     var rawMagnetometer = [Double]()
     var rawAccelerometer = [Double]()
+    var rawLocationAccuracy = [NSArray]()
     
     var smoothedSpeed = [Double]()
     
@@ -33,9 +34,11 @@ class DayTableViewController: UITableViewController {
     let speedThresholdCycling: Double = 30
     let speedThresholdRunning: Double = 20
     let speedThresholdWalking: Double = 10
-    let speedThresholdInactive: Double = 2
+    let speedThresholdInactive: Double = 4
     
-    var todaysEvents = [NSString]()
+    let distanceThresholdForSignificantMovement: Double = 100
+    
+    var todaysEvents = [NSArray]()
     
     var eventLocations = [NSArray]()
 
@@ -69,8 +72,11 @@ class DayTableViewController: UITableViewController {
                     rawFriendlyDates.append(dateFormatter.stringFromDate(result.valueForKey("dateRecord") as NSDate))
                     
                     let coordinates = [result.valueForKey("lat") as Double, result.valueForKey("long") as Double]
-                    
+                    let accuracy = [result.valueForKey("accuracyH") as Double, result.valueForKey("accuracyV") as Double]
                     rawLocation.append(coordinates)
+                    rawLocationAccuracy.append(accuracy)
+                    
+                    println("\(rawDates[rawDates.count - 1]) - \(accuracy)")
                 }
             }
             else {
@@ -108,7 +114,7 @@ class DayTableViewController: UITableViewController {
                     
                     println("No matching magnetometer record found for date: \(rawDates[i])")
                     
-                    rawMagnetometer.append(movementThreshold)
+                    rawMagnetometer.append(-999)
                 }
                 
             }
@@ -143,21 +149,24 @@ class DayTableViewController: UITableViewController {
                     
                     println("No matching accelerometer record found for date: \(rawDates[i])")
                     
-                    rawAccelerometer.append(accelerationThreshold)
+                    rawAccelerometer.append(-999)
                 }
                 
             }
         }
         
+        
+        
         smoothedSpeed = smoothSpeedData(rawLocation, smoothSize: 3)
+        
+        rawMagnetometer = cleanRawData(rawMagnetometer)
+        rawAccelerometer = cleanRawData(rawAccelerometer)
 
         var binaryMagnetometer = convertToBinary(rawMagnetometer, threshold: movementThreshold)
         var binaryAccelerometer = convertToBinary(rawAccelerometer, threshold: accelerationThreshold)
         var binarySpeed = convertToBinary(smoothedSpeed, threshold: speedThreshold)
-        
+
         var binaryIsActive = [Double]()
-        
-        //println("speed: \(smoothedSpeed.count) mag: \(binaryMagnetometer.count) acc: \(binaryAccelerometer.count) dates: \(rawDates.count)")
         
         for var i = 0; i < rawDates.count; i++ {
             
@@ -165,7 +174,7 @@ class DayTableViewController: UITableViewController {
             let bAcceler = binaryAccelerometer[i]
             let bSpeed = binarySpeed[i]
             
-            if bMagnet + bAcceler + bSpeed > 2 {
+            if bMagnet + bAcceler + bSpeed > 1 {
                 
                 binaryIsActive.append(1)
             }
@@ -180,47 +189,37 @@ class DayTableViewController: UITableViewController {
         
         todaysEvents = extractActivityEvents(smoothedBinaryIsActive)
         
-        // Insert padding so smooth can be conducted on entire array
-        
-        //binaryMagnetometer.insert(0.5, atIndex: 0)
-        //binaryMagnetometer.insert(0.5, atIndex: 0)
-        //binaryMagnetometer.append(0.5)
-        //binaryMagnetometer.append(0.5)
-        //binaryMagnetometer.append(0.5)
-        
-        //var smoothedBinaryMagnetometer = smoothData(binaryMagnetometer, size: 5)
-        
-        // Insert padding so smooth can be conducted on entire array
-        
-        //binaryAccelerometer.insert(0.3, atIndex: 0)
-        //binaryAccelerometer.append(0.3)
-        //binaryAccelerometer.append(0.3)
-        
-        //println(smoothedBinaryMagnetometer)
-        
-        //smoothedBinaryMagnetometer = convertToBinary(smoothedBinaryMagnetometer, threshold: smoothedMovementThreshold)
-        
-        //println(smoothedBinaryMagnetometer)
-        
-        //println(smoothedSpeed)
-        
-        //println(todayEvents)
-        
-        //println(smoothedBinaryAccelerometer)
-        
-        //println(rawAccelerometer)
-
-        //processSmoothedData(smoothedData, timedata: timeTracker)
-        
-        //setActivityBands()
-        
-        println("time, binaryMag, rawAcc, speed, IsActive")
+        //println("time, rawMag, rawAcc, speed, IsActive, Accuracy")
         
         for var i = 0; i < rawDates.count; i++ {
             
-            //println("\(rawFriendlyDates[i]), \(binaryMagnetometer[i]), \(rawAccelerometer[i]), \(smoothedSpeed[i]), \(binaryIsActive[i])")
+            //println("\(rawFriendlyDates[i]), \(rawMagnetometer[i]), \(rawAccelerometer[i]), \(smoothedSpeed[i]), \(binaryIsActive[i]), \(rawLocationAccuracy[i][0])")
         }
     }
+    
+    
+    func cleanRawData(var data: [Double]) -> [Double]{
+        
+        let indexCount = data.count
+        
+        for var i = 0; i < indexCount; i++ {
+            
+            if data[i] == -999 {
+                
+                if i < (indexCount - 1) {
+                    
+                    let adjustedValue: Double = (data[i - 1] + data[i + 1]) / 2
+                    
+                    data[i] = adjustedValue
+                }
+                else {
+                    data[i] = data[i - 1]
+                }
+            }
+        }
+        return data
+    }
+    
     
     func convertToBinary(data: [Double], threshold: Double) -> [Double] {
     
@@ -266,31 +265,37 @@ class DayTableViewController: UITableViewController {
         return dataSmoothed
     }
     
-    func extractActivityEvents(var data: [Double]) -> [NSString] {
+    func extractActivityEvents(var data: [Double]) -> [NSArray] {
  
         dateFormatter.dateFormat = "HH:mm"
         
-        var result = [NSString]()
+        var results = [NSMutableArray]()
         var speedTracker = [Double]()
         var locationTracker = [NSArray]()
-        
+        var isActiveNow: Bool = false
+        var wasActiveBefore: Bool = false
+        var activityType: NSString = ""
         var timeEndString: NSString = ""
         var timeStartString: NSString = ""
         
         //var indexMax = data.count
-        
+
         for var i = 1; i < data.count - 1; i++ {
+
+            let intervalBefore = rawDates[i].timeIntervalSinceDate(rawDates[i - 1])
+            let timeStart = rawDates[i].dateByAddingTimeInterval(intervalBefore * 0.4 * -1)
             
             var counter = 0 // Reset counter
 
             if data[i] > 0.4 {
-
-                let intervalBefore = rawDates[i].timeIntervalSinceDate(rawDates[i - 1])
-                let timeStart = rawDates[i].dateByAddingTimeInterval(intervalBefore * 0.4 * -1)
+                
+                isActiveNow = true
 
                 while data[i] > 0.4 && i < data.count - 1 {
                     
                     locationTracker.append([rawLocation[i][0], rawLocation[i][1]])
+                    
+                    //println("i = \(i) - raw lat: \(rawLocation[i][0]) raw long: \(rawLocation[i][1])")
                 
                     speedTracker.append(smoothedSpeed[i])
                     
@@ -298,72 +303,123 @@ class DayTableViewController: UITableViewController {
                     
                     counter++
                 }
-                
-                let intervalAfter = rawDates[i + 1].timeIntervalSinceDate(rawDates[i])
-                let timeEnd = rawDates[i].dateByAddingTimeInterval(intervalAfter * 0.4)
-                
-                timeStartString = dateFormatter.stringFromDate(timeStart)
-                timeEndString = dateFormatter.stringFromDate(timeEnd)
             }
             else {
                 
-                var counter = 0 // Reset counter
-                
-                let intervalBefore = rawDates[i].timeIntervalSinceDate(rawDates[i - 1])
-                let timeStart = rawDates[i].dateByAddingTimeInterval(intervalBefore * 0.4 * -1)
-                
+                isActiveNow = false
+
                 while data[i] <= 0.4 && i < data.count - 1 {
                     
                     locationTracker.append([rawLocation[i][0], rawLocation[i][1]])
                     
+                    //println("i = \(i) - raw lat: \(rawLocation[i][0]) raw long: \(rawLocation[i][1])")
+                    
                     speedTracker.append(smoothedSpeed[i])
                     
                     i++
                     
                     counter++
                 }
-                
-                let intervalAfter = rawDates[i + 1].timeIntervalSinceDate(rawDates[i])
-                let timeEnd = rawDates[i].dateByAddingTimeInterval(intervalAfter * 0.4)
-                
-                timeStartString = dateFormatter.stringFromDate(timeStart)
-                timeEndString = dateFormatter.stringFromDate(timeEnd)
             }
+            
+            let intervalAfter = rawDates[i + 1].timeIntervalSinceDate(rawDates[i])
+            let timeEnd = rawDates[i].dateByAddingTimeInterval(intervalAfter * 0.4)
+            
+            let interval = timeEnd.timeIntervalSinceDate(timeStart)
+            
+            timeStartString = dateFormatter.stringFromDate(timeStart)
+            timeEndString = dateFormatter.stringFromDate(timeEnd)
+            
+            // Determine activity type by analysing speed pattern
             
             if speedTracker.count < 4 {
                 
                 // Pad speed tracking array for better speed accuray
-                
                 speedTracker.append(smoothedSpeed[i + 1])
-                
                 speedTracker.insert(smoothedSpeed[i - counter - 1], atIndex: 0)
             }
             
-            // Add before and after coordinates to location tracker
-            
-            locationTracker.append([rawLocation[i + 1][0], rawLocation[i + 1][1]])
-            
-            locationTracker.insert([rawLocation[i - counter - 1][0], rawLocation[i - counter - 1][1]], atIndex: 0)
-            
-            println(speedTracker)
-            
             speedTracker = removeHighLow(speedTracker)
+            let speedMedian = round(arrayMedian(speedTracker) * 10) / 10
+            activityType = getActivityType(speedMedian)
             
-            let speedAverage = round(arrayAverage(speedTracker) * 10) / 10
+            if activityType == "inactive" {
+                isActiveNow = false
+            }
             
-            let activityType = getActivityType(speedAverage)
+            var ignoreEvent = false
+            var distanceMax: Double = 0
+            let rc = results.count
             
-            println("\(timeStartString) - \(timeEndString): \(activityType.uppercaseString) \(speedAverage)kph")
+            if rc > 0 {
+                
+                var distanceArray = [Double]()
+
+                let centerCoordinatesPreviousLocation = centerCoordinates(results[rc - 1][5] as [NSArray])
+
+                for var k = 0; k < locationTracker.count; k++ {
+                    
+                    let distance = calculateDistance(centerCoordinatesPreviousLocation, end: locationTracker[k])
+                    distanceArray.append(distance)
+               }
+
+                distanceMax = arrayMedian(distanceArray)
+
+                if isActiveNow && !wasActiveBefore && interval < 150 {
+                    println("condition0")
+                    ignoreEvent = true
+                }
+                
+                if isActiveNow && !wasActiveBefore && distanceMax < distanceThresholdForSignificantMovement {
+                    println("condition1")
+                    ignoreEvent = true
+                }
+                
+                if !isActiveNow && !wasActiveBefore {
+                    println("condition2")
+                    println("ALERT: find out why I'm here")
+                    ignoreEvent = true
+                }
+                
+                if locationTracker.count == 1 {
+                    println("condition3")
+                   ignoreEvent = true
+                }
+                
+                if distanceMax < distanceThresholdForSignificantMovement {
+                    println("condition4")
+                    //ignoreEvent = true
+                }
+            }
             
-            result.append("\(timeStartString) - \(timeEndString): \(activityType.uppercaseString) \(speedAverage)kph")
+            println("\(timeStartString) - \(timeEndString): \(activityType.uppercaseString) \(speedMedian)kph")
             
-            eventLocations.append(locationTracker)
-            
+            if ignoreEvent {
+
+                results[rc - 1][1] = timeEndString  // Update the end time of previous results record
+                
+                var locationTrackerPrevious: [NSArray] = results[rc - 1][5] as [NSArray]
+                
+                for var k = 0; k < locationTracker.count; k++ {
+                    
+                    locationTrackerPrevious.append(locationTracker[k])
+                }
+                results[rc - 1][5] = locationTrackerPrevious
+            }
+            else {
+                
+                // Add before and after coordinates to location tracker
+                locationTracker.append([rawLocation[i + 1][0], rawLocation[i + 1][1]])
+                locationTracker.insert([rawLocation[i - counter - 1][0], rawLocation[i - counter - 1][1]], atIndex: 0)
+
+                results.append([timeStartString, timeEndString, interval, activityType.uppercaseString, speedMedian, locationTracker])
+            }
+            wasActiveBefore = isActiveNow
             speedTracker.removeAll()
             locationTracker.removeAll()
         }
 
-        return result
+        return results
     }
     
     func removeHighLow(var data: [Double]) -> [Double] {
@@ -414,6 +470,21 @@ class DayTableViewController: UITableViewController {
         return total / Double(indexCount)
     }
     
+    func arrayMedian(var data: [Double]) -> Double {
+        
+        var median: Double = data[0]
+        var indexCount = data.count
+        
+        data.sort{$0 < $1}
+        
+        if indexCount > 1 {
+            
+            median = data[(Int(indexCount / 2))]
+        }
+        
+        return median
+   }
+    
     func getActivityType(speed: Double) -> NSString {
         
         var result: NSString = "unknown"
@@ -443,40 +514,114 @@ class DayTableViewController: UITableViewController {
     }
 
     func smoothSpeedData(var data: [NSArray], smoothSize: NSInteger) -> [Double] {
-        
-        var results = [Double]()
-        let z = Int((smoothSize - 1) / 2)
 
-        for var i = z; i < (data.count - z); i++ {
+        var results = [Double]()
+        var removeArray = [NSInteger]()
+        let z = Int((smoothSize - 1) / 2)
+        let lowerBound = z
+        let upperBound = data.count - z
+
+        for var i = lowerBound; i < upperBound; i++ {
             
             let latStart = data[i - z][0] as Double
-            let longStart = data[i - z][1] as Double
+            let lngStart = data[i - z][1] as Double
             let timeStart = rawDates[i]
             let latEnd = data[i + z][0] as Double
-            let longEnd = data[i + z][1] as Double
+            let lngEnd = data[i + z][1] as Double
             let timeEnd = rawDates[i + z]
             
-            var coordinateStart: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latStart, longStart)
-            var coordinateEnd: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latEnd, longEnd)
-            
-            var locationStart: CLLocation = CLLocation(coordinate: coordinateStart, altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 10, timestamp: NSDate())
-            var locationEnd: CLLocation = CLLocation(coordinate: coordinateEnd, altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 10, timestamp: NSDate())
-
-            let distance = locationStart.distanceFromLocation(locationEnd)
+            let distance = calculateDistance([latStart, lngStart], end: [latEnd, lngEnd])
             let interval = timeEnd.timeIntervalSinceDate(timeStart)
             let speedie = (distance / 1000) / (interval / 3600)
             let speed = round(speedie * 10) / 10
             
-            results.append(speed)
+            if interval < 15 {
+                
+                println("interval:\(round(interval))\tDist:\(round(distance))\tSP:\(round(speed))")
+            }
+            
+            // Do not append to result is speed value is deemed inaccurate
+            if speed > 30 && interval < 12 {
+                
+                removeArray.append(i)
+            }
+            else {
+                results.append(speed)
+            }
         }
         
-        // Pad data
+        // Pad data so that it matches other datasets
         let indexCount = results.count
         
         results.insert(results[0], atIndex: 0)
         results.append(results[indexCount - 2])
+        
+        // Remove matching record for inaccurate speed data
 
+        for var i = 0; i < removeArray.count; i++ {
+
+            rawDates.removeAtIndex(removeArray[i] - i)
+            rawFriendlyDates.removeAtIndex(removeArray[i] - i)
+            rawLocation.removeAtIndex(removeArray[i] - i)
+            rawLocationAccuracy.removeAtIndex(removeArray[i] - i)
+            rawMagnetometer.removeAtIndex(removeArray[i] - i)
+            rawAccelerometer.removeAtIndex(removeArray[i] - i)
+        }
         return results
+    }
+    
+    
+    func calculateDistance(start: NSArray, end: NSArray) -> Double {
+        
+        let latStart = start[0] as Double
+        let lngStart = start[1] as Double
+        let latEnd = end[0] as Double
+        let lngEnd = end[1] as Double
+        
+        var coordinateStart: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latStart, lngStart)
+        var coordinateEnd: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latEnd, lngEnd)
+        
+        var locationStart: CLLocation = CLLocation(coordinate: coordinateStart, altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 10, timestamp: NSDate())
+        var locationEnd: CLLocation = CLLocation(coordinate: coordinateEnd, altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 10, timestamp: NSDate())
+        
+        let distance = locationStart.distanceFromLocation(locationEnd)
+        
+        return distance
+    }
+    
+    func centerCoordinates(data: [NSArray]) -> [Double] {
+//println("center point data: \(data)")
+        // Calculate the center point of all coordinates
+        
+        let pi: Double = 22/7
+        var x: Double = 0
+        var y: Double = 0
+        var z: Double = 0
+        
+        let indexDbl: Double = Double(data.count)
+        
+        for var i = 0; i < data.count; i++ {
+            
+            let latStart: Double = data[i][0] as Double
+            let lngStart: Double = data[i][1] as Double
+            
+            let latRad = latStart * pi / 180
+            let lngRad = lngStart * pi / 180
+            
+            x += cos(latRad) * cos(lngRad)
+            y += cos(latRad) * sin(lngRad)
+            z += sin(latRad)
+        }
+        
+        x = x / indexDbl
+        y = y / indexDbl
+        z = z / indexDbl
+        
+        let lngCenter = atan2(y, x) * 180 / pi
+        let hyp = sqrt(x * x + y * y)
+        let latCenter = atan2(z, hyp) * 180 / pi
+        
+        return [latCenter, lngCenter]
     }
     
     override func didReceiveMemoryWarning() {
@@ -498,8 +643,13 @@ class DayTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as UITableViewCell
+        
+        let start = todaysEvents[indexPath.row][0] as NSString
+        let end = todaysEvents[indexPath.row][1] as NSString
+        let activity = todaysEvents[indexPath.row][3] as NSString
+        let speed = todaysEvents[indexPath.row][4] as Double
 
-        cell.textLabel?.text = todaysEvents[indexPath.row]
+        cell.textLabel?.text = "\(start) - \(end) \(activity) (\(speed)kph)"
         
         return cell
     }
@@ -520,7 +670,7 @@ class DayTableViewController: UITableViewController {
                 
                 let mapVC: MapViewController = segue.destinationViewController as MapViewController
 
-                mapVC.dataRoute = eventLocations[selectedIndex] as [NSArray]
+                mapVC.dataRoute = todaysEvents[selectedIndex][5] as [NSArray]
             }
         }
     }

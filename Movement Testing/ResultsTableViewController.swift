@@ -51,9 +51,10 @@ class ResultsTableViewController: UITableViewController {
                 
                 let lat = result["lat"] as Double
                 let long = result["long"] as Double
+                let accuracy = result["accuracyH"] as Double
                 
                 dataDates.append(result["dateRecord"] as NSDate)
-                dataLocation.append([lat, long])
+                dataLocation.append([lat, long, accuracy])
             }
             
             for var i = 0; i < dataDates.count; i++ {
@@ -133,19 +134,17 @@ class ResultsTableViewController: UITableViewController {
         
         output.removeAll()
 
-        for var i = 0; i < dataDates.count; i++ {
+        for var i = 0; i < dataDates.count - 2; i++ {
             
             let date = dataDates[i] as NSDate
             let mag = dataMagnetometer[i] as Double
             let acc = dataAccelerometer[i] as Double
+            let accuracy = dataLocation[i][2] as Double
             
             var interval:NSTimeInterval = 0
             var note = ""
-            
-            if i > 0 {
-                
-                interval = datePrevious.timeIntervalSinceDate(date)
-            }
+        
+            interval = date.timeIntervalSinceDate(dataDates[i + 1])
             
             for var j = 0; j < delegate.notes.count; j++ {
                 
@@ -155,7 +154,7 @@ class ResultsTableViewController: UITableViewController {
                 }
             }
             
-            let outputString = "\(Int(interval)) \t [\(round(mag * 10) / 10)] \t [\(round(acc * 10) / 10)] \t \(note)"
+            let outputString = "\(Int(interval))\t[\(round(mag * 10) / 10)]\t[\(round(acc * 10) / 10)]\t\(round(accuracy * 10) / 10)\(note)"
             
             output.append(outputString)
             

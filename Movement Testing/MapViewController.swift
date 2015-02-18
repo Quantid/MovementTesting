@@ -16,7 +16,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     var dataRoute = [NSArray]()
     
-    let pi: Double = 22/7
+    let zoomMax: Double = 300
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,11 +46,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         self.mapView.addOverlay(polyline)
         
-        let path: UIBezierPath = quadCurvedPathWithPoints(dataRoute)
+        //let path: UIBezierPath = quadCurvedPathWithPoints(dataRoute)
         
-        let strokeColor: UIColor = UIColor.brownColor()
+        //let strokeColor: UIColor = UIColor.brownColor()
         
-        self.view.setNeedsDisplay()
+        //self.view.setNeedsDisplay()
     }
     
     func prepareMap() {
@@ -60,7 +60,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         // Calculate center coordinates for the overall journey
         
-        let centerCoordinate = centerCoordinates()
+        let centerCoordinate = centerCoordinates(dataRoute)
         let latCenter = centerCoordinate[0]
         let lngCenter = centerCoordinate[1]
         let coordinateCenter: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latCenter, lngCenter)
@@ -74,15 +74,19 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let locationPoint: CLLocation = CLLocation(coordinate: coordinatePoint, altitude: 0, horizontalAccuracy: 10, verticalAccuracy: 10, timestamp: NSDate())
             
             let distance = locationCenter.distanceFromLocation(locationPoint)
-            println(distance)
+            
+            println("distance: \(distance)")
 
             if distance > distanceMax {
 
                 distanceMax = distance
-                
             }
         }
-            println("max distance: \(distanceMax)")
+        
+        if distanceMax < zoomMax {
+            
+            distanceMax = zoomMax
+        }
 
         println("centers: \(latCenter) \(lngCenter)")
         
@@ -91,27 +95,27 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         
         //var span: MKCoordinateSpan = MKCoordinateSpanMake(latDelta, lngDelta)
         var initLocation: CLLocationCoordinate2D = CLLocationCoordinate2DMake(latCenter, lngCenter)
-        var region: MKCoordinateRegion = MKCoordinateRegionMakeWithDistance(initLocation, distanceMax * 2, distanceMax * 2)
+        var region: MKCoordinateRegion = MKCoordinateRegionMakeWithDistance(initLocation, distanceMax * 2.5, distanceMax * 2.5)
         
         self.mapView.setRegion(region, animated: true)
-        
         self.mapView.centerCoordinate = initLocation
     }
     
-    func centerCoordinates() -> [Double] {
+    func centerCoordinates(data: [NSArray]) -> [Double] {
         
         // Calculate the center point of all coordinates
-        
+
+        let pi: Double = 22/7
         var x: Double = 0
         var y: Double = 0
         var z: Double = 0
         
-        let indexDbl: Double = Double(dataRoute.count)
+        let indexDbl: Double = Double(data.count)
         
-        for var i = 0; i < dataRoute.count; i++ {
+        for var i = 0; i < data.count; i++ {
 
-            let latStart: Double = dataRoute[i][0] as Double
-            let lngStart: Double = dataRoute[i][1] as Double
+            let latStart: Double = data[i][0] as Double
+            let lngStart: Double = data[i][1] as Double
 
             let latRad = latStart * pi / 180
             let lngRad = lngStart * pi / 180

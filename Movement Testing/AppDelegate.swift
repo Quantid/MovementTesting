@@ -21,34 +21,31 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     var timerForeground: NSTimer = NSTimer()
     
     var timerInterval: NSTimeInterval = 0
-    var intervalTracker = [Double]()
-    var intervalDelegateTracker: NSTimeInterval = 0
-    var throttleIsActivated: Bool = false
-    var userStatus = "inactive"
+    var userIsMoving: Bool = false
+
     
     var xPrev: Double = 0
     var yPrev: Double = 0
     var zPrev: Double = 0
     
-    var bestEffortLocation: CLLocation?
-    var userLocation: CLLocation?
+    var nowLocation = [CLLocation]()
     var locationPrev: CLLocation = CLLocation()
-    var locationDelegatePrev: CLLocation = CLLocation()
+    var locationOfPerviousLocationUpdate: CLLocation = CLLocation()
     var timePrev: NSDate = NSDate()
-    var timeDelegatePrev: NSDate = NSDate()
+    var timeOfPreviousLocationUpdate: NSDate = NSDate()
+    var timeOfLastAccurateLocation: NSDate = NSDate()
 
     var bgTask: UIBackgroundTaskIdentifier = 0
     
-    let inactiveTimer: NSTimeInterval = 60
-    let inactiveTimerMax: NSTimeInterval = 300
-    let activeTimer: NSTimeInterval = 10
-    let activeTimerMax: NSTimeInterval = 90
+    let inactiveTimerInitial: NSTimeInterval = 60
+    let inactiveTimerMax: NSTimeInterval = 420
+    let activeTimerInitial: NSTimeInterval = 30
+    let activeTimerMax: NSTimeInterval = 120
     
-    let magMovementThreshold: Double = 6
-    let accMovementThreshold: Double = 1.3
-    
-    var queueMagDeltas = [Double]() // Not currently in use
-    var queueAccValues = [Double]() // Not currently in use
+    let magMovementThreshold: Double = 8
+    //let accMovementThreshold: Double = 1.9
+
+    var hasAlreadyEngagedSensors: Bool = false
     
     var notes = [NSArray]()
 
@@ -56,128 +53,139 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        timerInterval = inactiveTimer
-
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
-        locationManager.requestAlwaysAuthorization()
-        locationManager.activityType = CLActivityType.Other
-        locationManager.pausesLocationUpdatesAutomatically = true
-        locationManager.delegate = self
+        let magAvailable: Bool = motionManager.magnetometerAvailable
+        let accAvailable: Bool = motionManager.accelerometerAvailable
+        var backgroundAvailable: Bool = false
         
-        if motionManager.magnetometerAvailable && motionManager.accelerometerAvailable {
+        let backgroundRefreshStatus = UIApplication.sharedApplication().backgroundRefreshStatus
+        if backgroundRefreshStatus == UIBackgroundRefreshStatus.Available {
+            backgroundAvailable = true
+        }
+        
+        UIDevice.currentDevice().batteryMonitoringEnabled = true
+        
+        if backgroundAvailable && magAvailable && accAvailable {
             
-            //locationManager.startUpdatingLocation()
+            timerInterval = inactiveTimerInitial
+            
+            locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+            locationManager.requestAlwaysAuthorization()
+            locationManager.activityType = CLActivityType.Other
+            locationManager.pausesLocationUpdatesAutomatically = true
+            locationManager.stopMonitoringSignificantLocationChanges()  // Just in case app was auto-launched after termination
+            locationManager.delegate = self
+            
+            locationManager.startUpdatingLocation()
             
             println("Launch setup completed.")
         }
         else {
-            
-            println("Magnetometer or Accelerometer unavailable")
+            println("Sorry, you must enable location and motion services for this app.")
         }
-        
         return true // Needed
     }
+    
 
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         
         var error = ""
-        
-        var nowLocation:CLLocation = locations[0] as CLLocation    // Collect location data
-        
-        userLocation = nowLocation
 
-        // Get distance and interval since last location delegate update
-        let intervalDelegate = timeDelegatePrev.timeIntervalSinceNow * -1
-        let distanceDelegate = nowLocation.distanceFromLocation(locationDelegatePrev)
+        let location:CLLocation = locations[0] as CLLocation    // Collect location data
+
+        nowLocation.append(location)
         
         // START filtering old, cached and inaccuracy location data
-        
-        var speed = calculateSpeed(distanceDelegate, interval: intervalDelegate)
-        
-        if speed > 500 {
-            
-            error = "Invalid speed of \(speed)kph"
+
+        let ageLocationUpdate = NSDate().timeIntervalSinceDate(nowLocation[0].timestamp)
+        if ageLocationUpdate > 5 {
+            error = "Data too old: \(ageLocationUpdate)"
         }
         
-        if intervalDelegate < 3 && intervalDelegateTracker < 20 {
-            
-            intervalDelegateTracker += intervalDelegate
-            
-            error = "Update too quick. intDel=\(intervalDelegateTracker)"
-        }
-        
-        if nowLocation.timestamp.timeIntervalSinceNow > 5 {
-            
-            error = "Data too old"
-        }
-        
-        if nowLocation.horizontalAccuracy < 0 {
-            
-            error = "Data inaccurate"
-        }
-        
-        locationDelegatePrev = nowLocation
-        timeDelegatePrev = NSDate()
-        
-        if error != "" {
-            
+        if error != ""{
             println("Location not processed. Error: \(error)")
-            
+            nowLocation.removeAll()
             return
         }
         
         // END of filtering
         
-        intervalDelegateTracker = 0
-        
         locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         locationManager.distanceFilter = 99999
         
-        if let timestamp = userLocation?.timestamp {
-            
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            var dateString = dateFormatter.stringFromDate(timestamp)
-            
-            //Add location data to coredata
-            var saveError: NSError?
-            let appDel:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
-            let context:NSManagedObjectContext = appDel.managedObjectContext!
-            var result = NSEntityDescription.insertNewObjectForEntityForName("LocationData", inManagedObjectContext: context) as NSManagedObject
-            
-            result.setValue(timestamp, forKey: "dateRecord")
-            result.setValue(NSDate(), forKey: "dateInserted")
-            result.setValue(dateFormatter.dateFromString(dateString), forKey: "dateShort")
-            result.setValue(userLocation?.coordinate.latitude, forKey: "lat")
-            result.setValue(userLocation?.coordinate.longitude, forKey: "long")
-            result.setValue(userLocation?.horizontalAccuracy, forKey: "accuracyH")
-            result.setValue(userLocation?.verticalAccuracy, forKey: "accuracyV")
-            
-            if context.save(&saveError) {
+        let userLocation = nowLocation[0]
+        nowLocation.removeAll()
 
-                engageMagnotometer(timestamp)
-                
-                println("Save location. Record @ \(timestamp) : Inserted @ \(NSDate())")
-            }
-            else {
-                
-                println("Could not save: \(saveError?.userInfo)")
-            }
-        }
-
-        // Set the variables needed for next location update
+        timerBackground.invalidate()
+        timerForeground.invalidate()
         
-        locationPrev = nowLocation
-        timePrev = NSDate()
+        // Kill background task
+        UIApplication.sharedApplication().endBackgroundTask(bgTask)
+        bgTask = UIBackgroundTaskInvalid
+        
+        let timestamp = userLocation.timestamp
+        let dateRecord = timestamp
+        let batteryLevel: Float = UIDevice.currentDevice().batteryLevel
+        let accuracy = userLocation.horizontalAccuracy
+        
+        if accuracy < 100 {
+            timeOfLastAccurateLocation = dateRecord
+        }
+        
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        var dateString = dateFormatter.stringFromDate(dateRecord)
+        
+        //Add location data to coredata
+        var saveError: NSError?
+        let appDel:AppDelegate = UIApplication.sharedApplication().delegate as AppDelegate
+        let context:NSManagedObjectContext = appDel.managedObjectContext!
+        var result = NSEntityDescription.insertNewObjectForEntityForName("LocationData", inManagedObjectContext: context) as NSManagedObject
+        
+        result.setValue(dateRecord, forKey: "dateRecord")
+        result.setValue(NSDate(), forKey: "dateInserted")
+        result.setValue(dateFormatter.dateFromString(dateString), forKey: "dateShort")
+        result.setValue(userLocation.coordinate.latitude, forKey: "lat")
+        result.setValue(userLocation.coordinate.longitude, forKey: "long")
+        result.setValue(userLocation.horizontalAccuracy, forKey: "accuracyH")
+        result.setValue(userLocation.verticalAccuracy, forKey: "accuracyV")
+        result.setValue(batteryLevel, forKey: "batteryLevel")
+
+        if context.save(&saveError) {
+            
+            if !hasAlreadyEngagedSensors {
+                
+                hasAlreadyEngagedSensors = true
+                
+                engageMagnotometer(dateRecord)
+            }
+            
+            println("Save location. Record @ \(dateRecord) : Inserted @ \(NSDate())")
+        }
+        else {
+            
+            println("Could not save: \(saveError?.userInfo)")
+        }
     }
     
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    
+    func locationManagerDidPauseLocationUpdates(manager: CLLocationManager!) {
         
+        println("Location service paused")
+    }
+    
+    func locationManagerDidResumeLocationUpdates(manager: CLLocationManager!) {
+        
+        println("Location service resumed")
+    }
+    
+    
+    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         println(error)
     }
     
-    func engageMagnotometer(timestampMag: NSDate) {
-
+    
+    func engageMagnotometer(dateRecord: NSDate) {
+        
         var delay = 20
         var delayCounter = 0
         var delta: Double = 0
@@ -213,7 +221,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 
                 let dateFormatter = NSDateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd"
-                var dateString = dateFormatter.stringFromDate(timestampMag)
+                var dateString = dateFormatter.stringFromDate(dateRecord)
                 
                 // Write to database
                 var error: NSError?
@@ -221,28 +229,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 let context:NSManagedObjectContext = appDel.managedObjectContext!
                 var result = NSEntityDescription.insertNewObjectForEntityForName("MagData", inManagedObjectContext: context) as NSManagedObject
                 
-                result.setValue(timestampMag, forKey: "dateRecord")
+                result.setValue(dateRecord, forKey: "dateRecord")
                 result.setValue(NSDate(), forKey: "dateInserted")
                 result.setValue(dateFormatter.dateFromString(dateString), forKey: "dateShort")
                 result.setValue(deltaMax, forKey: "delta")
                 
                 if context.save(&error) {
                     
-                    println("Save Magnetometer. Record @ \(timestampMag) : Inserted @ \(NSDate())")
+                    println("Save Magnetometer. Record @ \(dateRecord) : Inserted @ \(NSDate())")
+                    
+                    self.engageAccelerometer(dateRecord, magDelta: deltaMax)
                     
                 } else {
 
                     println("Could not save: \(error?.userInfo)")
                 }
-                
-                self.engageAccelerometer(deltaMax, timestampAcc: timestampMag)
             }
             
             delayCounter++
         }
     }
     
-    func engageAccelerometer(deltaMag: Double, timestampAcc: NSDate) {
+    func engageAccelerometer(dateRecord: NSDate, magDelta: Double) {
         
         var delay = 30
         var delayCounter = 0
@@ -279,11 +287,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 
                 self.motionManager.stopAccelerometerUpdates()
                 
-                self.adjustTimerSensitivity(deltaMag, da: deltaAcc, dateRecord: timestampAcc)
-                
                 let dateFormatter = NSDateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd"
-                var dateString = dateFormatter.stringFromDate(timestampAcc)
+                var dateString = dateFormatter.stringFromDate(dateRecord)
                 
                 // Write to database
                 var error: NSError?
@@ -291,15 +297,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
                 let context:NSManagedObjectContext = appDel.managedObjectContext!
                 var result = NSEntityDescription.insertNewObjectForEntityForName("AccData", inManagedObjectContext: context) as NSManagedObject
                 
-                result.setValue(timestampAcc, forKey: "dateRecord")
+                result.setValue(dateRecord, forKey: "dateRecord")
                 result.setValue(NSDate(), forKey: "dateInserted")
                 result.setValue(dateFormatter.dateFromString(dateString), forKey: "dateShort")
                 result.setValue(deltaAcc, forKey: "value")
                 
                 if context.save(&error) {
                     
-                    println("Save Accelerometer. Record @ \(timestampAcc) : Inserted @ \(NSDate())")
+                    println("Save Accelerometer. Record @ \(dateRecord) : Inserted @ \(NSDate())")
                     
+                    self.adjustTimerSensitivity(dateRecord, magDelta: magDelta, accValue: deltaAcc)
                 } else {
 
                     println("Could not save: \(error?.userInfo)")
@@ -308,47 +315,47 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         }
     }
     
-    func adjustTimerSensitivity(dm: Double, da: Double, dateRecord: NSDate) {
-        
+    
+    func adjustTimerSensitivity(dateRecord: NSDate, magDelta: Double, accValue: Double) {
+
         // Adjust timers if movement is detected (to optimise battery life)
         
-        if dm > magMovementThreshold && da > accMovementThreshold {
+        if magDelta > magMovementThreshold {
             
-            if userStatus == "inactive" {
+            if !userIsMoving {
                 
-                timerInterval = activeTimer
+                timerInterval = activeTimerInitial
             }
             else if timerInterval < activeTimerMax {
                 
-                timerInterval += 10
+                timerInterval += 30
             }
             
-            userStatus = "active"
+            userIsMoving = true
             
-            notes.append([dateRecord, "\tAV\(timerInterval)"])
+            notes.append([dateRecord, "\tmove\(timerInterval)"])
         }
         else {
             
-            if userStatus == "active" {
+            if userIsMoving {
                 
-                timerInterval = inactiveTimer
+                timerInterval = inactiveTimerInitial
             }
             else if timerInterval < inactiveTimerMax {
                 
                 timerInterval += 60
             }
             
-            userStatus = "inactive"
-            notes.append([dateRecord, "\tav\(timerInterval)"])
+            userIsMoving = false
+            
+            notes.append([dateRecord, "\tstation\(timerInterval)"])
         }
         
-        // Disable timers just in case any are still running
-        timerBackground.invalidate()
-        timerForeground.invalidate()
-        
-        // Kill background task
-        UIApplication.sharedApplication().endBackgroundTask(bgTask)
-        bgTask = UIBackgroundTaskInvalid
+        if UIDevice.currentDevice().batteryState == UIDeviceBatteryState.Charging {
+            timerInterval = activeTimerInitial
+            notes.append([dateRecord, "\tCHRG\(timerInterval)"])
+        }
+
         
         // Set background timer if app is in background
         if UIApplication.sharedApplication().applicationState == UIApplicationState.Background {
@@ -357,30 +364,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
             bgTask = UIApplication.sharedApplication().beginBackgroundTaskWithExpirationHandler({})
             
             timerBackground = NSTimer.scheduledTimerWithTimeInterval(timerInterval, target: self, selector: Selector("resumeUpdatingLocation"), userInfo: nil, repeats: false)
+            println(timerInterval)
         }
         else {
-            
             // Set foreground timer
-            timerForeground = NSTimer.scheduledTimerWithTimeInterval(timerInterval, target: self, selector: Selector("resumeUpdatingLocation"), userInfo: nil, repeats: true)
+            timerForeground = NSTimer.scheduledTimerWithTimeInterval(timerInterval, target: self, selector: Selector("resumeUpdatingLocation"), userInfo: nil, repeats: false)
         }
+        nowLocation.removeAll()
+        hasAlreadyEngagedSensors = false
     }
  
     func resumeUpdatingLocation() {
         
-        // Increase location accuracy
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        // Adjust location accuracy to conserve battery
+        
+        let timeSinceAccurateLocation = abs(timeOfLastAccurateLocation.timeIntervalSinceNow)
+
+        if !userIsMoving {
+            if  timeSinceAccurateLocation > 3600 && timeSinceAccurateLocation < 4800 {
+                locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+            }
+            else {
+                locationManager.desiredAccuracy = kCLLocationAccuracyKilometer
+            }
+        }
+        else {
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        }
+        
+        if UIDevice.currentDevice().batteryState == UIDeviceBatteryState.Charging {
+            locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        }
+        
         locationManager.distanceFilter = kCLDistanceFilterNone
         
         // Kill background task
+        
         UIApplication.sharedApplication().endBackgroundTask(bgTask)
         bgTask = UIBackgroundTaskInvalid
-    }
-    
-    func calculateSpeed(distance: CLLocationDistance, interval: Double) -> Double {
-        
-        let speed = (distance / 1000) / (interval / 3600)
-        
-        return speed
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -401,7 +422,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         bgTask = UIBackgroundTaskInvalid
         
         // Massive boost location accuracy
-        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.distanceFilter = kCLDistanceFilterNone
     }
 
@@ -419,7 +440,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
         
         // Set foreground timer
         timerForeground = NSTimer.scheduledTimerWithTimeInterval(
-            timerInterval, target: self, selector: Selector("resumeUpdatingLocation"), userInfo: nil, repeats: true)
+            timerInterval, target: self, selector: Selector("resumeUpdatingLocation"), userInfo: nil, repeats: false)
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
@@ -427,8 +448,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CLLocationManagerDelegate
     }
 
     func applicationWillTerminate(application: UIApplication) {
-        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
-        // Saves changes in the application's managed object context before the application terminates.
+        
+        // Clean up shop...probably not necessary
+        
+        timerForeground.invalidate()
+        timerBackground.invalidate()
+
+        UIApplication.sharedApplication().endBackgroundTask(bgTask)
+        bgTask = UIBackgroundTaskInvalid
+
+        locationManager.stopUpdatingLocation()
+        
+        locationManager.startMonitoringSignificantLocationChanges()  // IMPORTANT: This should automatically relaunch the app in a few minutes
 
         self.saveContext()
     }

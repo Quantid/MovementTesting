@@ -11,7 +11,6 @@
 		D5A442D31A7A3EA2009668BB /* ResultsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5A442D21A7A3EA2009668BB /* ResultsTableViewController.swift */; };
 		D5C8F2E61A759C17000D10D4 /* CalendarTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C8F2E51A759C17000D10D4 /* CalendarTableViewController.swift */; };
 		D5C8F2E81A75A5CF000D10D4 /* DayTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C8F2E71A75A5CF000D10D4 /* DayTableViewController.swift */; };
-		D5CECC111A8619E4006A22EF /* SensorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CECC101A8619E4006A22EF /* SensorController.swift */; };
 		D5CECC131A8642B4006A22EF /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CECC121A8642B4006A22EF /* MapViewController.swift */; };
 		D5CECC151A8642F0006A22EF /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5CECC141A8642F0006A22EF /* MapKit.framework */; };
 		D5CECC171A865DB8006A22EF /* VenueTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5CECC161A865DB8006A22EF /* VenueTableViewController.swift */; };
@@ -28,6 +27,7 @@
 		D5DD16191A72CCB40000AB2E /* Movement_TestingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DD16181A72CCB40000AB2E /* Movement_TestingTests.swift */; };
 		D5DD16231A72CD3F0000AB2E /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5DD16221A72CD3F0000AB2E /* CoreLocation.framework */; };
 		D5DD16251A72CD460000AB2E /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D5DD16241A72CD460000AB2E /* CoreMotion.framework */; };
+		D5E2A2501A8CC5AB00434305 /* Calculations.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5E2A24F1A8CC5AB00434305 /* Calculations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,7 +47,6 @@
 		D5A442D21A7A3EA2009668BB /* ResultsTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResultsTableViewController.swift; sourceTree = "<group>"; };
 		D5C8F2E51A759C17000D10D4 /* CalendarTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarTableViewController.swift; sourceTree = "<group>"; };
 		D5C8F2E71A75A5CF000D10D4 /* DayTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayTableViewController.swift; sourceTree = "<group>"; };
-		D5CECC101A8619E4006A22EF /* SensorController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SensorController.swift; sourceTree = "<group>"; };
 		D5CECC121A8642B4006A22EF /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		D5CECC141A8642F0006A22EF /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		D5CECC161A865DB8006A22EF /* VenueTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VenueTableViewController.swift; sourceTree = "<group>"; };
@@ -69,6 +68,7 @@
 		D5DD16181A72CCB40000AB2E /* Movement_TestingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Movement_TestingTests.swift; sourceTree = "<group>"; };
 		D5DD16221A72CD3F0000AB2E /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		D5DD16241A72CD460000AB2E /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		D5E2A24F1A8CC5AB00434305 /* Calculations.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Calculations.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,7 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				D5DD15FF1A72CCB40000AB2E /* AppDelegate.swift */,
-				D5CECC101A8619E4006A22EF /* SensorController.swift */,
+				D5E2A24F1A8CC5AB00434305 /* Calculations.swift */,
 				D5A442D21A7A3EA2009668BB /* ResultsTableViewController.swift */,
 				D5C8F2E51A759C17000D10D4 /* CalendarTableViewController.swift */,
 				D5C8F2E71A75A5CF000D10D4 /* DayTableViewController.swift */,
@@ -324,12 +324,12 @@
 				D5A442D31A7A3EA2009668BB /* ResultsTableViewController.swift in Sources */,
 				D5DD16001A72CCB40000AB2E /* AppDelegate.swift in Sources */,
 				D5CECC281A869F4F006A22EF /* Location.swift in Sources */,
+				D5E2A2501A8CC5AB00434305 /* Calculations.swift in Sources */,
 				D5DD16031A72CCB40000AB2E /* Movement_Testing.xcdatamodeld in Sources */,
 				D5CECC171A865DB8006A22EF /* VenueTableViewController.swift in Sources */,
 				D5CECC261A8691FD006A22EF /* Venue.swift in Sources */,
 				D5C8F2E61A759C17000D10D4 /* CalendarTableViewController.swift in Sources */,
 				D5C8F2E81A75A5CF000D10D4 /* DayTableViewController.swift in Sources */,
-				D5CECC111A8619E4006A22EF /* SensorController.swift in Sources */,
 				D5CECC131A8642B4006A22EF /* MapViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
